@@ -1,17 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 
-/**
- *
- * @author Adm
- */
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.lang.NumberFormatException;
+
 public class cadastroVIEW extends javax.swing.JFrame {
 
-    /**
-     * Creates new form cadastroVIEW
-     */
     public cadastroVIEW() {
         initComponents();
     }
@@ -52,6 +45,12 @@ public class cadastroVIEW extends javax.swing.JFrame {
         cadastroNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cadastroNomeActionPerformed(evt);
+            }
+        });
+
+        cadastroValor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastroValorActionPerformed(evt);
             }
         });
 
@@ -145,18 +144,33 @@ public class cadastroVIEW extends javax.swing.JFrame {
         String valor = cadastroValor.getText();
         String status = "A Venda";
         produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
-        
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
-        
+        try {
+            produto.setValor(Integer.parseInt(valor));
+            produto.setStatus(status);
+
+            ProdutosDAO produtodao = new ProdutosDAO();
+            try {
+                produtodao.cadastrarProduto(produto);
+                JOptionPane.showMessageDialog(null, "cadastro realizado com sucesso");
+                cadastroValor.setText("");
+                cadastroNome.setText("");
+            } catch (SQLException erro) {
+                JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar esse item  " + erro.getMessage());
+            }
+        } catch (NumberFormatException erro) {
+            JOptionPane.showMessageDialog(null, "O valor deve ser um número");
+            cadastroValor.setText("");
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
         listagemVIEW listagem = new listagemVIEW(); 
         listagem.setVisible(true);
     }//GEN-LAST:event_btnProdutosActionPerformed
+
+    private void cadastroValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroValorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cadastroValorActionPerformed
 
     /**
      * @param args the command line arguments
