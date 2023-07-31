@@ -143,8 +143,8 @@ public class cadastroVIEW extends javax.swing.JFrame {
         String nome = cadastroNome.getText();
         String valor = cadastroValor.getText();
         String status = "A Venda";
-        produto.setNome(nome);
         try {
+            produto.setNome(nome);
             produto.setValor(Integer.parseInt(valor));
             produto.setStatus(status);
 
@@ -158,7 +158,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar esse item  " + erro.getMessage());
             }
         } catch (NumberFormatException erro) {
-            JOptionPane.showMessageDialog(null, "O valor deve ser um número");
+            JOptionPane.showMessageDialog(null, "O valor deve ser um número inteiro");
             cadastroValor.setText("");
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed

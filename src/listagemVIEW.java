@@ -1,10 +1,15 @@
 
 import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
 public class listagemVIEW extends javax.swing.JFrame {
-
+    private final ProdutosDAO produtosDao = new ProdutosDAO();
+    private final String[] colunas = {"Id", "Nome", "Valor", "Status"};
+    private DefaultTableModel tabelaModelo = new DefaultTableModel(colunas, 0);
+    
     public listagemVIEW() {
         initComponents();
         listarProdutos();
@@ -20,7 +25,7 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaProdutos = new javax.swing.JTable();
+        tabelaProdutos = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -32,18 +37,8 @@ public class listagemVIEW extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listaProdutos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nome", "Valor", "Status"
-            }
-        ));
-        jScrollPane1.setViewportView(listaProdutos);
+        tabelaProdutos.setModel(tabelaModelo);
+        jScrollPane1.setViewportView(tabelaProdutos);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
         jLabel1.setText("Lista de Produtos");
@@ -156,28 +151,34 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable listaProdutos;
+    private javax.swing.JTable tabelaProdutos;
     // End of variables declaration//GEN-END:variables
 
-    private void listarProdutos(){
+    private void listarProdutos() {
         try {
-            ProdutosDAO produtosdao = new ProdutosDAO();
-            
-            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
-            model.setNumRows(0);
-            
-            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
-            
-            for(int i = 0; i < listagem.size(); i++){
-                model.addRow(new Object[]{
-                    listagem.get(i).getId(),
-                    listagem.get(i).getNome(),
-                    listagem.get(i).getValor(),
-                    listagem.get(i).getStatus()
-                });
+            List<ProdutosDTO> prodList = this.produtosDao.listarProdutos();
+            if (!prodList.isEmpty()) {
+                for (int i = 0; i < prodList.size(); i++) {
+                    ProdutosDTO pruduto = prodList.get(i);
+                    String idString = Integer.toString(pruduto.getId());
+                    String valorString = Integer.toString(pruduto.getValor());
+
+                    String[] linha = {
+                        idString,
+                        pruduto.getNome(),
+                        valorString,
+                        pruduto.getStatus()
+                    };
+                    tabelaModelo.addRow(linha);
+                }
+                tabelaProdutos.setModel(tabelaModelo);
+            } else {
+                DefaultTableModel tabelaModelo = new DefaultTableModel(colunas, 0);
+                tabelaProdutos.setModel(tabelaModelo);
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar produtos");
         }
-    
+
     }
 }

@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProdutosDAO {
@@ -34,9 +35,17 @@ public class ProdutosDAO {
         return status;
     }
     
-    public ArrayList<ProdutosDTO> listarProdutos(){
-        
-        return listagem;
+    public List<ProdutosDTO> listarProdutos() throws SQLException{
+        conn = new conectaDAO().connectDB();
+        List<ProdutosDTO> listaProdutos = new ArrayList();
+        String sql = "SELECT * FROM produtos";
+        prep = conn.prepareStatement(sql);
+        resultset = prep.executeQuery();
+        while(resultset.next()) {
+            ProdutosDTO prodDao = new ProdutosDTO(resultset.getInt("id"), resultset.getString("nome"), resultset.getInt("valor"), resultset.getString("status"));
+            listaProdutos.add(prodDao);
+        }
+        return listaProdutos;
     }
     
     
