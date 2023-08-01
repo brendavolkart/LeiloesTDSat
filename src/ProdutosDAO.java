@@ -48,6 +48,20 @@ public class ProdutosDAO {
         return listaProdutos;
     }
     
+    public List<ProdutosDTO> listarVendidos() throws SQLException{
+        conn = new conectaDAO().connectDB();
+        List<ProdutosDTO> listaVendidos = new ArrayList();
+        String sql = "SELECT * FROM produtos where status = ?";
+        prep = conn.prepareStatement(sql);
+        prep.setString(1, "vendido");
+        resultset = prep.executeQuery();
+        while(resultset.next()) {
+            ProdutosDTO prodDao = new ProdutosDTO(resultset.getInt("id"), resultset.getString("nome"), resultset.getInt("valor"), resultset.getString("status"));
+            listaVendidos.add(prodDao);
+        }
+        return listaVendidos;
+    }
+    
     public int venderProdutos(int idProduto) throws SQLException{
         int status;
         
