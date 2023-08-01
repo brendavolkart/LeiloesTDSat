@@ -1,5 +1,5 @@
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -122,9 +122,11 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
         
-        ProdutosDAO produtosdao = new ProdutosDAO();
-        
-        //produtosdao.venderProduto(Integer.parseInt(id));
+        try {
+            this.produtosDao.venderProdutos(Integer.parseInt(id));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar o status do produto");
+        }
         listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
 
@@ -156,6 +158,7 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void listarProdutos() {
         try {
+            tabelaModelo = new DefaultTableModel(colunas, 0);
             List<ProdutosDTO> prodList = this.produtosDao.listarProdutos();
             if (!prodList.isEmpty()) {
                 for (int i = 0; i < prodList.size(); i++) {
@@ -179,6 +182,5 @@ public class listagemVIEW extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao listar produtos");
         }
-
     }
 }
