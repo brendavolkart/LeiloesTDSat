@@ -48,6 +48,16 @@ public class ProdutosDAO {
         return listaProdutos;
     }
     
+    public int venderProdutos(int idProduto) throws SQLException{
+        int status;
+        
+        prep = conn.prepareStatement("UPDATE produtos SET status = ? where id = ?");
+        prep.setString(1, "Vendido");
+        prep.setInt(2, idProduto);
+        status = prep.executeUpdate();
+        return status;
+        
+    }
     
     
         
